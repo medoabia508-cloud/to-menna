@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>❤️</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg1:#0b1020;
+      --bg2:#151a2e;
+      --card:#0f1630cc;
+      --text:#f7f7fb;
+      --muted:#cfd3ff;
+      --accent:#ff5a86;
+      --accent2:#7c6cff;
+      --border:rgba(255,255,255,.12);
+      --shadow: 0 18px 60px rgba(0,0,0,.45);
+      --radius: 18px;
+    }
+
+    *{box-sizing:border-box}
+
+    body{
+      margin:0;
+      font-family:"Cairo", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(1200px 600px at 10% 10%, rgba(255,90,134,.22), transparent 60%),
+        radial-gradient(1000px 600px at 90% 0%, rgba(124,108,255,.20), transparent 55%),
+        linear-gradient(180deg, var(--bg1), var(--bg2));
+      min-height:100vh;
+      overflow-x:hidden;
+    }
+
+    /* ===== LOCK SCREEN ===== */
+    #lockScreen{
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:24px;
+    }
+    .lockBox{
+      width:min(380px, 100%);
+      text-align:center;
+      padding:22px 18px;
+      border:1px solid var(--border);
+      border-radius:18px;
+      background: rgba(255,255,255,.04);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 18px 60px rgba(0,0,0,.35);
+    }
+    .lockBox h2{margin:0 0 12px 0;font-size:18px}
+    .lockBox input{
+      width:100%;
+      padding:12px;
+      border-radius:12px;
+      border:1px solid rgba(255,255,255,.15);
+      background: rgba(0,0,0,.18);
+      color: var(--text);
+      text-align:center;
+      font-size:16px;
+      outline:none;
+    }
+    .lockBox button{
+      margin-top:12px;
+      width:100%;
+      padding:11px 14px;
+      border:none;
+      border-radius:12px;
+      background:linear-gradient(135deg,#ff5a86,#7c6cff);
+      color:white;
+      font-weight:800;
+      cursor:pointer;
+      font-family: inherit;
+    }
+    #error{
+      color:#ff6b6b;
+      margin-top:10px;
+      display:none;
+      font-size:13px;
+    }
+    #hint{
+      margin-top:10px;
+      color:rgba(255,255,255,.70);
+      font-size:13px;
+      display:none;
+    }
+
+    /* ===== MAIN CONTENT ===== */
+    #mainContent{
+      display:none;
+      min-height:100vh;
+    }
+    .fade{animation: fadeIn .55s ease forwards;}
+    @keyframes fadeIn{
+      from{opacity:0;transform:scale(.985)}
+      to{opacity:1;transform:scale(1)}
+    }
+
+    .wrap{max-width:980px;margin:0 auto;padding:28px 18px 70px}
+    .hero{
+      margin-top:10px;
+      border:1px solid var(--border);
+      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+      position:relative;
+    }
+    .hero-inner{padding:26px 22px 22px}
+    h1{margin:0;font-size:32px;line-height:1.2}
+    .sub{margin:10px 0 0;color:var(--muted);font-size:15px;max-width:70ch}
+
+    .row{display:grid;grid-template-columns: 1.2fr .8fr;gap:14px;margin-top:18px}
+    @media (max-width:860px){.row{grid-template-columns:1fr}}
+
+    .card{
+      border:1px solid var(--border);
+      background: var(--card);
+      border-radius: var(--radius);
+      padding:18px;
+      box-shadow: 0 10px 28px rgba(0,0,0,.28);
+      backdrop-filter: blur(10px);
+    }
+    .card h2{margin:0 0 10px;font-size:16px;color:var(--muted);font-weight:800}
+
+    .line{height:1px;background:rgba(255,255,255,.10);margin:14px 0}
+
+    .btns{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px}
+    button{
+      appearance:none;border:none;cursor:pointer;
+      color:var(--text);font-weight:800;
+      padding:10px 12px;border-radius:12px;
+      background: linear-gradient(135deg, rgba(255,90,134,.92), rgba(124,108,255,.86));
+      box-shadow: 0 12px 24px rgba(255,90,134,.12);
+      transition: transform .12s ease, filter .12s ease;
+      font-family: inherit;
+    }
+    button.secondary{
+      background: rgba(255,255,255,.06);
+      border:1px solid var(--border);
+      color:var(--muted);
+      box-shadow:none;
+      font-weight:800;
+    }
+    button:hover{transform: translateY(-1px); filter:brightness(1.03)}
+    .hidden{display:none}
+
+    .note{
+      margin-top:12px;
+      padding:14px 14px;
+      border-radius: 14px;
+      border:1px dashed rgba(255,255,255,.18);
+      background: rgba(0,0,0,.18);
+      line-height:1.9;
+      font-size:15px;
+    }
+
+    .timeline{
+      display:flex;flex-direction:column;gap:10px;margin:0;padding:0;list-style:none
+    }
+    .tl-item{
+      padding:12px 14px 12px 12px;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.03);
+      position:relative;
+    }
+    .tl-item:before{
+      content:"";
+      position:absolute;right:-7px;top:14px;
+      width:10px;height:10px;border-radius:999px;
+      background: var(--accent);
+      box-shadow: 0 0 0 5px rgba(255,90,134,.12);
+    }
+    .tl-date{font-size:12px;color:var(--muted);margin-bottom:3px}
+    .tl-text{font-size:14px;line-height:1.6}
+
+    .grid{display:grid;grid-template-columns: repeat(3, 1fr);gap:12px;}
+    @media (max-width:860px){.grid{grid-template-columns:1fr}}
+
+    .open-card{
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.03);
+      padding:14px;
+      border-radius: 16px;
+      overflow:hidden;
+    }
+    .open-card .t{font-weight:900}
+    .open-card .m{margin-top:8px;color:var(--muted);font-size:13px;line-height:1.7}
+    .open-card .reveal{
+      margin-top:10px;
+      width:100%;
+      background: rgba(255,255,255,.06);
+      border:1px solid var(--border);
+      color:var(--text);
+      font-weight:900;
+      padding:10px 12px;
+      border-radius:12px;
+    }
+
+    .photo-container{
+      margin-top:12px;
+      border-radius:14px;
+      overflow:hidden;
+      border:1px solid rgba(255,255,255,.15);
+    }
+    .photo-container img{
+      width:100%;
+      display:block;
+      border-radius:14px;
+      transition: transform .4s ease;
+    }
+    .photo-container img:hover{transform: scale(1.05);}
+
+    footer{margin-top:16px;color:rgba(255,255,255,.55);font-size:12px;text-align:center}
+
+    /* floating hearts */
+    .heart{
+      position:absolute;bottom:-30px;
+      font-size:16px;opacity:.65;
+      animation: floatUp linear forwards;
+      filter: drop-shadow(0 8px 12px rgba(0,0,0,.35));
+      user-select:none;pointer-events:none;
+    }
+    @keyframes floatUp{
+      from{transform: translateY(0) translateX(0) rotate(0deg); opacity:0}
+      10%{opacity:.75}
+      to{transform: translateY(-120vh) translateX(var(--drift)) rotate(18deg); opacity:0}
+    }
+
+    /* Press & hold progress */
+    .holdWrap{margin-top:12px}
+    .progress{
+      height:10px;border-radius:999px;
+      background: rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.10);
+      overflow:hidden;
+    }
+    .bar{
+      height:100%;
+      width:0%;
+      background: linear-gradient(90deg, rgba(255,90,134,.92), rgba(124,108,255,.86));
+      transition: width .08s linear;
+    }
+    .hintSmall{margin-top:8px;font-size:12px;color: rgba(255,255,255,.62);}
+  </style>
+</head>
+
+<body>
+
+  <!-- LOCK SCREEN -->
+  <div id="lockScreen">
+    <div class="lockBox">
+      <h2>اكتبي كلمة السر علشان تدخلي 😜</h2>
+      <input type="password" id="passwordInput" placeholder="كلمة السر" autocomplete="off" />
+      <button id="unlockBtn" type="button">دخول</button>
+      <div id="error"> غلط 🤨 </div>
+      <div id="hint">تلميح: <span id="hintText">أول يوم اتكلمنا فيه</span></div>
+    </div>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <div id="mainContent">
+    <audio id="bgMusic" src="song.mp3" loop></audio>
+    <div class="wrap">
+      <section class="hero">
+        <div class="hero-inner">
+
+          <h1> الى منونة ❤️</h1>
+          <p class="sub">  </p>
+
+          <div class="row">
+            <div class="card">
+              <h2>حكايتنا</h2>
+
+              <div class="note">
+                مش عارف أبدأ منين… بس قبل أي حاجة: ده مش علشان الفالنتاين 😒 (إنتي عارفة إني مش بحب أحتفل بيه)
+                بس كل الدنيا هنا بتحتفل، وكل حاجة بشوفها بتفكرني بيكي… وأنا جوايا كلام كتير عايز أقولهولك.<br><br>
+
+                أوقات كتير بييجي في بالي إزاي بدأنا نتكلم… فجأة كده اقتحمتي حياتي،
+                وساعتها مكنتش عارف إن دي هتكون أحلى حاجة هتحصلّي في حياتي.<br><br>
+
+                أنا مبثقش في الحب يا منّة 🫤… مش مضمون وممكن يقلب في أي وقت.
+                وعلى الرغم إني بحبك جدًا، بس مش ده اللي خلاني أتعلق بيكي.<br><br>
+
+                أنا حبيت فيكي حاجات كتير: تربيتك، ووعيك بالناس، ونضجك،
+                وقد إيه إنتي فهماني… ده غير عيونك اللي زي القمر يعني (يا قمر إنتِ 😉).<br><br>
+
+                وجودك في حياتي غيّرني… خلّاني منفتح للحياة، وادّاني دافع إني أطور من نفسي،
+                وأشتغل أكتر وأنجز… علشان نتجوز.<br><br>
+
+                بقيت أشوف مستقبلي معاكي… لما بتخيل أي حاجة حلوة، بتخيلك معايا…<br><br>
+
+                أنا فخور ومبسوط إنك خطيبتي… ربنا يتمملنا على خير،
+                ويجمعنا على طاعته، ونبقى زوج وزوجة قريب إن شاء الله ♥️<br><br>
+
+                بحبك حب السنين والتنين.<br><br>
+                — محمود
+              </div>
+
+              <div class="btns">
+                <button id="btnSecret" type="button">اضغطي لمفاجأة</button>
+                <button class="secondary" id="btnHearts" type="button">قلوب أكتر</button>
+              </div>
+
+              <div class="note hidden" id="secretNote">
+                سر صغير: أنا لحد دلوقتي بابتسم كل ما اسمك يظهر قدامي.
+                وكمان… انتي عندك قدرة غريبة تعملي “تعطيل مؤقت” لمخي 😌
+                (دي ميزة… مش bug) ❤️
+              </div>
+
+              <div class="line"></div>
+
+              <div class="holdWrap">
+                <button class="secondary" id="holdBtn" type="button" style="width:100%">اضغطي مطوّلًا لمفاجأة</button>
+                <div class="progress" aria-hidden="true"><div class="bar" id="holdBar"></div></div>
+                <div class="hintSmall">اضغطي حوالي ثانية 👀</div>
+                <div class="note hidden" id="holdNote">
+                  مفاجأة: لو عندي أمنية واحدة… تبقى إني أعيش كل لحظة معاكي تاني،
+                  بس بحضن أكتر… وضحك أكتر… وبوسات على الجبهة أكتر 💕
+                </div>
+              </div>
+            </div>
+
+            <div class="card">
+              <h2>TimeLine</h2>
+              <ul class="timeline">
+                <li class="tl-item">
+                  <div class="tl-date">19/07/2024</div>
+                  <div class="tl-text">أول مرة اتكلمنا… (أحلى رسالة جتلي في حياتي)</div>
+                </li>
+                <li class="tl-item">
+                  <div class="tl-date">10/12/2025</div>
+                  <div class="tl-text">أول مرة شوفت القمر فيها ✨</div>
+                </li>
+                <li class="tl-item">
+                  <div class="tl-date">19/12/2025</div>
+                  <div class="tl-text">خطوبتنا ♥️</div>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <div style="height:14px"></div>
+
+          
+            </div>
+          </div>
+
+          <footer>
+          Made with ❤️ by محمود  
+          </footer>
+
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <script>
+    // ===== PASSWORD + HINT =====
+
+const correctPassword = "19072024";
+let attempts = 0;
+
+const inputEl = document.getElementById("passwordInput");
+const errorEl = document.getElementById("error");
+const hintEl  = document.getElementById("hint");
+const music = document.getElementById("bgMusic");
+
+function unlock(){
+  const input = inputEl.value.trim();
+
+ if(input === correctPassword){
+  document.getElementById("lockScreen").style.display = "none";
+  const main = document.getElementById("mainContent");
+  main.style.display = "block";
+  main.classList.add("fade");
+
+  // 🔥 SAFE AUTOPLAY
+  music.muted = true;
+  music.volume = 0.6;
+
+  music.play().then(() => {
+    setTimeout(() => {
+      music.muted = false;
+    }, 200);
+  }).catch((err) => {
+    console.log("Autoplay blocked:", err);
+  });
+
+
+
+  } else {
+    attempts++;
+    errorEl.style.display = "block";
+    if(attempts >= 1) hintEl.style.display = "block";
+    inputEl.value = "";
+    inputEl.focus();
+  }
+}
+
+
+    unlockBtn.addEventListener("click", unlock);
+    inputEl.addEventListener("keydown", (e) => { if(e.key === "Enter") unlock(); });
+
+    // ===== SECRET NOTE =====
+    const btnSecret = document.getElementById("btnSecret");
+    const secretNote = document.getElementById("secretNote");
+    btnSecret.addEventListener("click", () => {
+      secretNote.classList.toggle("hidden");
+      spawnHearts(10);
+    });
+
+   
+
+    // ===== HEARTS =====
+    const btnHearts = document.getElementById("btnHearts");
+    btnHearts.addEventListener("click", () => spawnHearts(18));
+
+    function spawnHearts(count){
+      const hearts = ["❤️","💗","💖","💕","💘"];
+      for(let i=0;i<count;i++){
+        const h = document.createElement("div");
+        h.className = "heart";
+        h.textContent = hearts[Math.floor(Math.random()*hearts.length)];
+        h.style.left = Math.random()*100 + "vw";
+        h.style.setProperty("--drift", (Math.random()*120 - 60) + "px");
+        h.style.animationDuration = (4 + Math.random()*3) + "s";
+        h.style.fontSize = (14 + Math.random()*18) + "px";
+        h.style.opacity = (0.35 + Math.random()*0.5).toFixed(2);
+        document.body.appendChild(h);
+        setTimeout(() => h.remove(), 8000);
+      }
+    }
+    setTimeout(() => spawnHearts(8), 500);
+
+    // ===== PRESS & HOLD =====
+    const holdBtn = document.getElementById("holdBtn");
+    const holdBar = document.getElementById("holdBar");
+    const holdNote = document.getElementById("holdNote");
+    let holdTimer = null;
+    let holdStart = 0;
+    const HOLD_MS = 1000;
+
+    function startHold(){
+      if(holdTimer) return;
+      holdStart = performance.now();
+      holdTimer = setInterval(() => {
+        const t = performance.now() - holdStart;
+        const pct = Math.min(100, (t / HOLD_MS) * 100);
+        holdBar.style.width = pct + "%";
+        if(t >= HOLD_MS) endHold(true);
+      }, 16);
+    }
+
+    function endHold(success=false){
+      if(!holdTimer) return;
+      clearInterval(holdTimer);
+      holdTimer = null;
+      if(success){
+        holdNote.classList.remove("hidden");
+        spawnHearts(14);
+      }
+      setTimeout(() => { holdBar.style.width = "0%"; }, 120);
+    }
+
+    holdBtn.addEventListener("mousedown", startHold);
+    holdBtn.addEventListener("mouseup", () => endHold(false));
+    holdBtn.addEventListener("mouseleave", () => endHold(false));
+    holdBtn.addEventListener("touchstart", (e) => { e.preventDefault(); startHold(); }, {passive:false});
+    holdBtn.addEventListener("touchend", () => endHold(false));
+    holdBtn.addEventListener("touchcancel", () => endHold(false));
+  </script>
+</body>
+</html>
